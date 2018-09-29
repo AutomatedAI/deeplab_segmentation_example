@@ -17,7 +17,7 @@ class DeepLabModel(object):
     INPUT_SIZE = 513
     FROZEN_GRAPH_NAME = 'frozen_inference_graph'
 
-    def __init__(self, tarball_path,device,gpu_frac):
+    def __init__(self, tarball_path,device='/gpu:0',gpu_frac=1):
         """Creates and loads pretrained deeplab model."""
         self.graph = tf.Graph()
 
