@@ -70,8 +70,30 @@ class DeepLabModel(object):
             feed_dict={self.INPUT_TENSOR_NAME: [np.asarray(resized_image)]})
 
         seg_map = batch_seg_map[0]
-        return resized_image, seg_map
+        
+        return make_sending_seg(resized_im, seg_map)
 
+    def run_mask(self, image):
+        """Runs inference on a single image.
+
+        Args:
+          image: A PIL.Image object, raw input image.
+
+        Returns:
+          resized_image: RGB image resized from original input image.
+          seg_map: Segmentation map of `resized_image`.
+        """
+        width, height = image.size
+        resize_ratio = 1.0 * self.INPUT_SIZE / max(width, height)
+        target_size = (int(resize_ratio * width), int(resize_ratio * height))
+        resized_image = image.convert('RGB').resize(target_size, Image.ANTIALIAS)
+
+        batch_seg_map = self.sess.run(
+            self.OUTPUT_TENSOR_NAME,
+            feed_dict={self.INPUT_TENSOR_NAME: [np.asarray(resized_image)]})
+
+        seg_map = batch_seg_map[0]
+        return resized_image, seg_map
 
 
 def create_pascal_label_colormap():
