@@ -71,7 +71,7 @@ class DeepLabModel(object):
 
         seg_map = batch_seg_map[0]
         
-        return make_sending_seg(resized_im, seg_map)
+        return make_sending_seg(resized_image , seg_map)
 
     def run_mask(self, image):
         """Runs inference on a single image.
